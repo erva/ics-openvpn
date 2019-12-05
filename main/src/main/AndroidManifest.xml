@@ -204,9 +204,13 @@
             </intent-filter>
         </activity>
 
+        <!--
+        The application could not be installed: INSTALL_FAILED_CONFLICTING_PROVIDER so authorities
+        de.blinkt.openvpn.FileProvider -> de.blinkt.openvpn.client.FileProvider
+        -->
         <provider
             android:name=".FileProvider"
-            android:authorities="de.blinkt.openvpn.FileProvider"
+            android:authorities="de.blinkt.openvpn.client.FileProvider"
             android:exported="true"
             android:grantUriPermissions="true"
             tools:ignore="ExportedContentProvider" />

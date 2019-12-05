@@ -4,9 +4,8 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import de.blinkt.openvpn.VpnProfile;
-import de.blinkt.openvpn.activities.ConfigConverter;
 import de.blinkt.openvpn.core.ConfigParser;
-import de.blinkt.openvpn.fragments.Utils;
+import io.erva.client.utils.Utils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +26,6 @@ public class Client {
   private transient List<String> mPathsegments;
   private String mEmbeddedPwFile;
   private String mAliasName = null;
-  private Map<Utils.FileType, de.blinkt.openvpn.views.FileSelectLayout>
-      fileSelectMap = new HashMap<>();
 
 
   public void main() {
@@ -111,7 +108,6 @@ public class Client {
     if (foundfile == null && filename != null && !filename.equals("")) {
       log(de.blinkt.openvpn.R.string.import_could_not_open, filename);
     }
-    fileSelectMap.put(fileType, null);
 
     return foundfile;
   }
