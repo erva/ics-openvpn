@@ -5,7 +5,7 @@
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("checkstyle")
 }
 
@@ -55,6 +55,11 @@ android {
                 //        "-DANDROID_STL=c++_static")
             }
         }
+
+        buildConfigField("boolean", "openvpn3", "true")
+//        java.apply {
+//            sourceSets { "src/ovpn3/java/"; openvpn3SwigFiles }
+//        }
     }
 
     externalNativeBuild {
@@ -64,28 +69,33 @@ android {
     }
 
     sourceSets {
-        getByName("main") {
+        getByName("debug") {
+            java.srcDirs("src/", openvpn3SwigFiles)
             assets.srcDirs("src/main/assets", "build/ovpnassets")
         }
 
-        create("ui") {
-            java.srcDirs("src/ovpn3/java/", openvpn3SwigFiles)
-        }
-        create("skeleton") {
-        }
-
-        getByName("debug") {
-
-        }
-
-        getByName("release") {
-
-        }
+//        getByName("main") {
+//            assets.srcDirs("src/main/assets", "build/ovpnassets")
+//        }
+//
+//        create("ui") {
+//            java.srcDirs("src/ovpn3/java/", openvpn3SwigFiles)
+//        }
+//        create("skeleton") {
+//        }
+//
+//        getByName("debug") {
+//
+//        }
+//
+//        getByName("release") {
+//
+//        }
     }
 
-    signingConfigs {
-        create("release") {}
-    }
+//    signingConfigs {
+//        create("release") {}
+//    }
 
     lintOptions {
         enable("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
@@ -94,23 +104,27 @@ android {
     }
 
     buildTypes {
+        getByName("debug"){
+            isDebuggable = true
+        }
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+//            signingConfig = signingConfigs.getByName("release")
         }
     }
 
-    flavorDimensions("implementation")
+//    flavorDimensions("implementation")
 
-    productFlavors {
-        create("ui") {
-            setDimension("implementation")
-            buildConfigField("boolean", "openvpn3", "true")
-        }
-        create("skeleton") {
-            setDimension("implementation")
-            buildConfigField("boolean", "openvpn3", "false")
-        }
-    }
+//    productFlavors {
+//        create("ui") {
+//            setDimension("implementation")
+//            buildConfigField("boolean", "openvpn3", "true")
+//        }
+//        create("skeleton") {
+//            setDimension("implementation")
+//            buildConfigField("boolean", "openvpn3", "false")
+//        }
+//    }
 
 
     compileOptions {
@@ -130,18 +144,18 @@ android {
 }
 
 // ~/.gradle/gradle.properties
-if (project.hasProperty("keystoreFile") &&
-        project.hasProperty("keystorePassword") &&
-        project.hasProperty("keystoreAliasPassword")) {
-    android.signingConfigs.getByName("release") {
-        storeFile = file(project.properties["keystoreFile"] as String)
-        storePassword = project.properties["keystorePassword"] as String
-        keyPassword = project.properties["keystoreAliasPassword"] as String
-        keyAlias = project.properties["keystoreAlias"] as String
-    }
-} else {
-    android.buildTypes.getByName("release").signingConfig = null
-}
+//if (project.hasProperty("keystoreFile") &&
+//        project.hasProperty("keystorePassword") &&
+//        project.hasProperty("keystoreAliasPassword")) {
+//    android.signingConfigs.getByName("release") {
+//        storeFile = file(project.properties["keystoreFile"] as String)
+//        storePassword = project.properties["keystorePassword"] as String
+//        keyPassword = project.properties["keystoreAliasPassword"] as String
+//        keyAlias = project.properties["keystoreAlias"] as String
+//    }
+//} else {
+//    android.buildTypes.getByName("release").signingConfig = null
+//}
 
 
 /* Hack-o-rama but it works good enough and documentation is surprisingly sparse */
@@ -158,11 +172,11 @@ dependencies {
     implementation("androidx.annotation:annotation:1.1.0")
 
     // Is there a nicer way to do this?
-    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:1.1.3")
-    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
-    dependencies.add("uiImplementation", "androidx.cardview:cardview:1.0.0")
-    dependencies.add("uiImplementation", "androidx.recyclerview:recyclerview:1.0.0")
-    dependencies.add("uiImplementation", "com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.0.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
 

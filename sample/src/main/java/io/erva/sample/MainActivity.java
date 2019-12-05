@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.erva.client.utils.ConfigFileConverter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
-
-import static io.erva.sample.utils.ConfigFileConverter.readAndFixConfigFile;
 
 public class MainActivity extends Activity {
 
@@ -58,7 +57,7 @@ public class MainActivity extends Activity {
             try {
                 assert returnUri != null;
                 BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(getContentResolver().openInputStream(returnUri))));
-                config = readAndFixConfigFile(br);
+                config = ConfigFileConverter.readAndFixConfigFile(br);
                 br.close();
                 startVpnButton.setVisibility(View.VISIBLE);
                 configStateTextView.setText(R.string.config_file_loaded);
