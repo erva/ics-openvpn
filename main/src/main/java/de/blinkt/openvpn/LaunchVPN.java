@@ -31,9 +31,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import android.widget.Toast;
 import java.io.IOException;
 
-import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.api.ExternalAppDatabase;
 import de.blinkt.openvpn.core.ConnectionStatus;
 import de.blinkt.openvpn.core.IServiceStatus;
@@ -267,11 +267,7 @@ public class LaunchVPN extends Activity {
     }
 
     void showLogWindow() {
-
-        Intent startLW = new Intent(getBaseContext(), LogWindow.class);
-        startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(startLW);
-
+        Toast.makeText(this, "showLogWindow() not implemented", Toast.LENGTH_LONG).show();
     }
 
     void showConfigErrorDialog(int vpnok) {
