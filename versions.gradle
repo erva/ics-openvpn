@@ -1,0 +1,14 @@
+ext {
+
+  versions = [
+      compileSdkVersion: 29,
+      minSdkVersion: 21,
+      targetSdkVersion: 29,
+
+      coreVersionName: '0.7.10',
+      coreVersionCode: 163,
+
+      clientVersionName: '0.7.10.163', //coreVersionName+coreVersionCode
+      clientVersionCode: 1,
+  ]
+}

@@ -1,28 +1,27 @@
 apply plugin: 'com.android.library'
 
 android {
-  compileSdkVersion 29
-  buildToolsVersion = '28.0.3'
+  def version = rootProject.extensions.ext.versions
+  compileSdkVersion version.compileSdkVersion
 
   defaultConfig {
-    minSdkVersion 21
-    targetSdkVersion 29
-    versionCode 1
-    versionName "1.0"
+    minSdkVersion version.minSdkVersion
+    targetSdkVersion version.targetSdkVersion
+
+    versionName = version.clientVersionName
+    versionCode = version.clientVersionCode
   }
 
-  buildTypes {
-    debug {
-      debuggable true
-    }
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+  libraryVariants.all { variant ->
+    variant.outputs.all {
+      outputFileName = new File("./",
+          "ovpn_client-$defaultConfig.versionName.$defaultConfig.versionCode" + ".aar")
     }
   }
+
   compileOptions {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 }
 
