@@ -56,7 +56,6 @@ public class MainActivity extends Activity implements VpnHelperCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         configStateTextView = findViewById(R.id.tv_config_state);
-        config = Const.config;
         findViewById(R.id.btn_chose_file).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
