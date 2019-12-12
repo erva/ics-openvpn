@@ -62,15 +62,16 @@ assembleTask.dependsOn(swigTask)
 preBuildTask.dependsOn(swigTask)
 
 android {
-    compileSdkVersion 29
+    def version = rootProject.extensions.ext.versions
+    compileSdkVersion version.compileSdkVersion
 
     flavorDimensions "default"
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode = 163
-        versionName = "0.7.10"
+        minSdkVersion version.minSdkVersion
+        targetSdkVersion version.targetSdkVersion
+        versionName = version.coreVersionName
+        versionCode = version.coreVersionCode
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {

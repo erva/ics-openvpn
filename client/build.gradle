@@ -3,29 +3,30 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion = '28.0.3'
+  def version = rootProject.extensions.ext.versions
+  compileSdkVersion version.compileSdkVersion
 
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-    }
+  defaultConfig {
+    minSdkVersion version.minSdkVersion
+    targetSdkVersion version.targetSdkVersion
 
-    buildTypes {
-        debug {
-            debuggable true
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    versionName = version.clientVersionName
+    versionCode = version.clientVersionCode
+  }
+
+  libraryVariants.all { variant ->
+    variant.outputs.all {
+      // example client/build/outputs/aar/ovpn_client-0.7.10.163.1.aar
+      // 0.7.10 - core(main) version number, 163 - core(main) version code, 1 - client version code
+      outputFileName = new File("./",
+          "ovpn_client-$defaultConfig.versionName.$defaultConfig.versionCode" + ".aar")
     }
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
+  }
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
