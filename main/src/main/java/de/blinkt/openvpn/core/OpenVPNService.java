@@ -53,7 +53,6 @@ import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
-import de.blinkt.openvpn.activities.MainActivity;
 import de.blinkt.openvpn.api.ExternalAppDatabase;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 import de.blinkt.openvpn.core.VpnStatus.StateListener;
@@ -276,8 +275,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 nbuilder.setContentIntent(getUserInputIntent(msg));
             }
         }
-        else
-            nbuilder.setContentIntent(getGraphPendingIntent());
+        //else
+        //    nbuilder.setContentIntent(getGraphPendingIntent());
 
         if (when != 0)
             nbuilder.setWhen(when);
@@ -424,17 +423,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     }
 
     PendingIntent getGraphPendingIntent() {
-        // Let the configure Button show the Log
-        Class activityClass = MainActivity.class;
-        if (mNotificationActivityClass != null) {
-            activityClass = mNotificationActivityClass;
-        }
-        Intent intent = new Intent(getBaseContext(), activityClass);
-        intent.putExtra("PAGE", "graph");
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        return startLW;
+        Toast.makeText(this, "getGraphPendingIntent() not implemented", Toast.LENGTH_LONG).show();
+        Log.e("OpenVPNService", "getGraphPendingIntent() not implemented");
+        return null;
 
     }
 
@@ -910,7 +901,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mLocalIPv6 = null;
         mDomain = null;
 
-        builder.setConfigureIntent(getGraphPendingIntent());
+        //builder.setConfigureIntent(getGraphPendingIntent());
 
         try {
             //Debug.stopMethodTracing();
