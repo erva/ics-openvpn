@@ -37,7 +37,8 @@ class VpnHelper(activity: Activity, val callback: VpnHelperCallback, shortcutUUI
     }
 
     init {
-        if (Preferences.getDefaultSharedPreferences(activity).getBoolean(CLEARLOG, true))
+        if (Preferences.getDefaultSharedPreferences(activity).getBoolean(
+                CLEARLOG, true))
             VpnStatus.clearLog()
 
         val profileToConnect = ProfileManager.get(activity, shortcutUUID)
@@ -64,7 +65,9 @@ class VpnHelper(activity: Activity, val callback: VpnHelperCallback, shortcutUUI
                 ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
             // Start the query
             try {
-                activity.startActivityForResult(intent, VPN_PERMISSION_REQUEST_CODE)
+                activity.startActivityForResult(intent,
+                    VPN_PERMISSION_REQUEST_CODE
+                )
                 isWaitingForPermission = true
             } catch (e: ActivityNotFoundException) {
                 // Shame on you Sony! At least one user reported that

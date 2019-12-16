@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import io.erva.client.utils.VpnHelperCallbackKt;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements VpnHelperCallback {
                 configStateTextView.setText("Error while loading config file");
             }
         }
-        if (requestCode == VPN_PERMISSION_REQUEST_CODE) {
+        if (requestCode == VpnHelperCallbackKt.VPN_PERMISSION_REQUEST_CODE) {
             vpnPermissionResult(resultCode);
         }
     }
