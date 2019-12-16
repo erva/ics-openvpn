@@ -26,7 +26,13 @@ android {
   }
 }
 
+
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//    implementation project ('ovpn_client-0.7.10.163.1')
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation project(':client')
-    implementation project(path: ':main')
+//    implementation project(path: ':ovpn_client-0.7.10.163.1')
+
+
 }
