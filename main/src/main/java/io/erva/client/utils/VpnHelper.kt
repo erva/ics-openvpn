@@ -9,48 +9,29 @@ import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.*
 import java.io.IOException
 
-class VpnHelper(activity: Activity, val callback: VpnHelperCallback, shortcutUUID: String) {
+class VpnHelper(val callback: VpnHelperCallback) {
 
-    companion object {
-
-        const val CLEARLOG = "clearlogconnect"
-    }
-
-    private val mSelectedProfile: VpnProfile
+    private var mSelectedProfile: VpnProfile? = null
     private var serviceCommander: IOpenVPNServiceInternal? = null
     private var mCmfixed = false
     private var isWaitingForPermission = false
 
     private val connection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(className: ComponentName?) {
-            className
         }
 
         override fun onServiceConnected(className: ComponentName, binder: IBinder) {
             if (className.className == OpenVPNService::class.java.name) {
-                serviceCommander = IOpenVPNServiceInternal.Stub.asInterface(binder);
-                callback.vpnServiceBinderReceived(serviceCommander!!)
+                serviceCommander = IOpenVPNServiceInternal.Stub.asInterface(binder)
+                callback.vpnServiceBinderReceived(VPNController(serviceCommander!!))
             } else {
                 serviceCommander = null
             }
         }
     }
 
-    init {
-        if (Preferences.getDefaultSharedPreferences(activity).getBoolean(
-                CLEARLOG, true))
-            VpnStatus.clearLog()
 
-        val profileToConnect = ProfileManager.get(activity, shortcutUUID)
-        if (profileToConnect == null) {
-            VpnStatus.logError(de.blinkt.openvpn.R.string.shortcut_profile_notfound)
-            throw IllegalArgumentException("VPN profile must be saved")
-        } else {
-            mSelectedProfile = profileToConnect
-        }
-    }
-
-    fun startVpnOrWaitForPermission(activity: Activity) {
+    private fun startVpnOrWaitForPermission(activity: Activity) {
         val intent = VpnService.prepare(activity)
         // Check if we want to fix /dev/tun
         val prefs = Preferences.getDefaultSharedPreferences(activity)
@@ -65,9 +46,7 @@ class VpnHelper(activity: Activity, val callback: VpnHelperCallback, shortcutUUI
                 ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
             // Start the query
             try {
-                activity.startActivityForResult(intent,
-                    VPN_PERMISSION_REQUEST_CODE
-                )
+                activity.startActivityForResult(intent, VPN_PERMISSION_REQUEST_CODE)
                 isWaitingForPermission = true
             } catch (e: ActivityNotFoundException) {
                 // Shame on you Sony! At least one user reported that
@@ -100,13 +79,17 @@ class VpnHelper(activity: Activity, val callback: VpnHelperCallback, shortcutUUI
     }
 
     private fun startVPNConnection(context: Context) {
+        if (mSelectedProfile == null) throw IllegalArgumentException("Profile must be set")
         ProfileManager.updateLRU(context, mSelectedProfile)
-        val startVPN: Intent = mSelectedProfile.prepareStartService(context)
-
-
+        val startVPN: Intent? = mSelectedProfile?.prepareStartService(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(startVPN) else context.startService(startVPN)
         val intent = Intent(context, OpenVPNService::class.java)
         intent.action = OpenVPNService.START_SERVICE
         val result = context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+    }
+
+    fun startVPN(activity: Activity, config: String, username: String, password: String) {
+        mSelectedProfile = ConfigHelper.getProfile(activity, config, username, password)
+        startVpnOrWaitForPermission(activity)
     }
 }
