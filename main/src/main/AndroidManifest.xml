@@ -15,9 +15,7 @@
         android:appCategory="productivity"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app"
         android:supportsRtl="true"
-        android:theme="@style/blinkt"
         tools:ignore="UnusedAttribute">
         <activity android:name=".core.CredentialsPopup"></activity>
 

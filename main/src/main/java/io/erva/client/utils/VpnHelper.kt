@@ -11,11 +11,6 @@ import java.io.IOException
 
 class VpnHelper(val callback: VpnHelperCallback) {
 
-    companion object {
-
-        const val CLEARLOG = "clearlogconnect"
-    }
-
     private var mSelectedProfile: VpnProfile? = null
     private var serviceCommander: IOpenVPNServiceInternal? = null
     private var mCmfixed = false
@@ -36,7 +31,7 @@ class VpnHelper(val callback: VpnHelperCallback) {
     }
 
 
-    fun startVpnOrWaitForPermission(activity: Activity) {
+    private fun startVpnOrWaitForPermission(activity: Activity) {
         val intent = VpnService.prepare(activity)
         // Check if we want to fix /dev/tun
         val prefs = Preferences.getDefaultSharedPreferences(activity)
@@ -96,6 +91,5 @@ class VpnHelper(val callback: VpnHelperCallback) {
     fun startVPN(activity: Activity, config: String, username: String, password: String) {
         mSelectedProfile = ConfigHelper.getProfile(activity, config, username, password)
         startVpnOrWaitForPermission(activity)
-
     }
 }

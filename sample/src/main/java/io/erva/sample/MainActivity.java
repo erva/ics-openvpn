@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -23,8 +22,8 @@ import io.erva.client.utils.ConfigHelper;
 import io.erva.client.utils.VPNController;
 import io.erva.client.utils.VpnHelper;
 import io.erva.client.utils.VpnHelperCallback;
+import io.erva.client.utils.VpnHelperCallbackKt;
 
-import static io.erva.client.utils.VpnHelperCallbackKt.VPN_PERMISSION_REQUEST_CODE;
 
 public class MainActivity extends Activity implements VpnHelperCallback {
 
@@ -35,8 +34,6 @@ public class MainActivity extends Activity implements VpnHelperCallback {
     private EditText editTextPassword;
     private Button startVpnButton;
     private Button stopVpnButton;
-    private Button pauseVpnButton;
-    private Button resumeVpnButton;
     private VpnHelper vpnHelper;
     private VPNController vpnController;
 
@@ -59,11 +56,9 @@ public class MainActivity extends Activity implements VpnHelperCallback {
         editTextLogin = findViewById(R.id.login);
         startVpnButton = findViewById(R.id.btn_start_vpn);
         stopVpnButton = findViewById(R.id.btn_stop_vpn);
-        pauseVpnButton = findViewById(R.id.btn_pause_vpn);
-        resumeVpnButton = findViewById(R.id.btn_resume_vpn);
         startVpnButton.setOnClickListener(view -> {
             if (!editTextLogin.getText().toString().isEmpty() && !editTextPassword.getText().toString().isEmpty()) {
-                vpnHelper.startVpnOrWaitForPermission(this);
+//                vpnHelper.startVpnOrWaitForPermission(this);
                 vpnHelper.startVPN(MainActivity.this, config, editTextLogin.getText().toString(), editTextPassword.getText().toString());
             } else {
                 Toast.makeText(this, "Need to enter password and login", Toast.LENGTH_SHORT).show();
@@ -91,7 +86,7 @@ public class MainActivity extends Activity implements VpnHelperCallback {
                 configStateTextView.setText("Error while loading config file");
             }
         }
-        if (requestCode == VPN_PERMISSION_REQUEST_CODE) {
+        if (requestCode == VpnHelperCallbackKt.VPN_PERMISSION_REQUEST_CODE) {
             vpnPermissionResult(resultCode);
         }
     }
