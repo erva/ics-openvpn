@@ -22,7 +22,6 @@ import io.erva.client.utils.ConfigHelper;
 import io.erva.client.utils.VPNController;
 import io.erva.client.utils.VpnHelper;
 import io.erva.client.utils.VpnHelperCallback;
-import io.erva.client.utils.VpnHelperCallbackKt;
 
 
 public class MainActivity extends Activity implements VpnHelperCallback {
@@ -86,7 +85,7 @@ public class MainActivity extends Activity implements VpnHelperCallback {
                 configStateTextView.setText("Error while loading config file");
             }
         }
-        if (requestCode == VpnHelperCallbackKt.VPN_PERMISSION_REQUEST_CODE) {
+        if (requestCode == VPN_PERMISSION_REQUEST_CODE) {
             vpnPermissionResult(resultCode);
         }
     }

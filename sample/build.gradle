@@ -28,5 +28,6 @@ android {
 
 
 dependencies {
-    implementation project(path:':main')
+//    implementation project(path:':main')
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
 }
