@@ -13,67 +13,82 @@ import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ConfigParser;
 import de.blinkt.openvpn.core.ProfileManager;
 
+@SuppressWarnings("WeakerAccess")
 public class ConfigHelper {
 
-  /**
-   * Current VPN connection implementation doesn't support TCP, so remove it from config.
-   * TODO this is temporary 5.12.2019
-   * @throws IOException
-   */
-  public static String readAndFixConfigFile(BufferedReader reader) throws IOException {
-    StringBuilder result = new StringBuilder();
-    String line;
-    StringBuilder tempLines = new StringBuilder();
-    boolean isConnectionBlock = false;
-    boolean isContainsUpd = false;
+    private static final String DEFAULT_VPN_USERNAME = "DEFAULT_USER";
 
-    while ((line = reader.readLine()) != null) {
-      if (line.contains("<connection>")) {
-        isConnectionBlock = true;
-      }
-      if (isConnectionBlock) {
-        tempLines.append(line);
-        tempLines.append('\n');
-        if (line.contains("</connection>")) {
-          isConnectionBlock = false;
+    /**
+     * Current VPN connection implementation doesn't support TCP, so remove it from config.
+     * TODO this is temporary 5.12.2019
+     *
+     * @throws IOException
+     */
+    public static String readAndFixConfigFile(BufferedReader reader) throws IOException {
+        StringBuilder result = new StringBuilder();
+        String line;
+        StringBuilder tempLines = new StringBuilder();
+        boolean isConnectionBlock = false;
+        boolean isContainsUpd = false;
 
-          if (!tempLines.toString().matches("(?s)(.*)remote(?s)(.*)tcp(?s)(.*)")) {
-            result.append(tempLines);
-          }
-          tempLines = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            if (line.contains("<connection>")) {
+                isConnectionBlock = true;
+            }
+            if (isConnectionBlock) {
+                tempLines.append(line);
+                tempLines.append('\n');
+                if (line.contains("</connection>")) {
+                    isConnectionBlock = false;
+
+                    if (!tempLines.toString().matches("(?s)(.*)remote(?s)(.*)tcp(?s)(.*)")) {
+                        result.append(tempLines);
+                    }
+                    tempLines = new StringBuilder();
+                }
+                continue;
+            }
+            result.append(line);
+            result.append('\n');
         }
-        continue;
-      }
-      result.append(line);
-      result.append('\n');
+
+        return result.toString();
     }
 
-    return result.toString();
-  }
+    public static VpnProfile getProfile(Context context, String config, String username, String password) {
+        InputStream inputStream = new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8));
 
-  public static VpnProfile getProfile(Context context, String config, String username, String password){
-      InputStream inputStream = new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8));
-
-    VpnProfile result = null;
-      ConfigParser cp = new ConfigParser();
+        VpnProfile result = null;
+        ConfigParser cp = new ConfigParser();
         try {
             InputStreamReader isr = new InputStreamReader(inputStream);
             cp.parseConfig(isr);
             result = cp.convertProfile();
             ProfileManager vpl = ProfileManager.getInstance(context);
-            VpnProfile savedProfile = vpl.getProfileByName(username);
+            VpnProfile savedProfile = vpl.getProfileByName(DEFAULT_VPN_USERNAME);
             if (savedProfile != null) {
                 vpl.removeProfile(context, savedProfile);
             }
-            result.mName = username;
+            result.mName = DEFAULT_VPN_USERNAME;
             result.mUsername = username;
             result.mPassword = password;
             vpl.addProfile(result);
             vpl.saveProfile(context, result);
             vpl.saveProfileList(context);
-        } catch ( IOException | ConfigParser.ConfigParseError e) {
+        } catch (IOException | ConfigParser.ConfigParseError e) {
             e.printStackTrace();
         }
-      return result;
+        return result;
+    }
+
+    public static VpnProfile getDefaultProfile(Context context) {
+        ProfileManager vpl = ProfileManager.getInstance(context);
+        return vpl.getProfileByName(DEFAULT_VPN_USERNAME);
+    }
+
+    public static void removeCredentials(Context context) {
+        ProfileManager vpl = ProfileManager.getInstance(context);
+        VpnProfile profile = vpl.getProfileByName(DEFAULT_VPN_USERNAME);
+        vpl.removeProfile(context, profile);
     }
 }
