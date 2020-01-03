@@ -14,4 +14,12 @@ public class VPNController {
     public boolean stopVPN(boolean replaceConnection) throws RemoteException {
         return field.stopVPN(replaceConnection);
     }
+
+    public void pause() throws RemoteException {
+        field.userPause(true);
+    }
+
+    public void resume() throws RemoteException {
+        field.userPause(false);
+    }
 }
