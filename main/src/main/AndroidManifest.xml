@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- <uses-permission android:name="com.android.vending.BILLING" /> -->
 
     <application
-        android:name=".core.ICSOpenVPNApplication"
         android:allowBackup="true"
         android:appCategory="productivity"
         android:extractNativeLibs="true"
@@ -206,12 +205,12 @@
         The application could not be installed: INSTALL_FAILED_CONFLICTING_PROVIDER so authorities
         de.blinkt.openvpn.FileProvider -> de.blinkt.openvpn.client.FileProvider
         -->
-        <provider
+<!--        <provider
             android:name=".FileProvider"
             android:authorities="de.blinkt.openvpn.client.FileProvider"
             android:exported="true"
             android:grantUriPermissions="true"
-            tools:ignore="ExportedContentProvider" />
+            tools:ignore="ExportedContentProvider" />-->
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>

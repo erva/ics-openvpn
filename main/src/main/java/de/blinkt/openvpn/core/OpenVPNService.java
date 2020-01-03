@@ -259,7 +259,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             priority = PRIORITY_DEFAULT;
 
         if (mProfile != null)
-            nbuilder.setContentTitle(getString(R.string.notifcation_title, mProfile.mName));
+            nbuilder.setContentTitle(getString(R.string.notifcation_title, mProfile.mUsername));
         else
             nbuilder.setContentTitle(getString(R.string.notifcation_title_notconnect));
 
@@ -282,11 +282,11 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             nbuilder.setWhen(when);
 
 
-/*        // Try to set the priority available since API 16 (Jellybean)
+        // Try to set the priority available since API 16 (Jellybean)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             jbNotificationExtras(priority, nbuilder);
             addVpnActionsToNotification(nbuilder);
-        }*/
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);
@@ -397,7 +397,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         nbuilder.addAction(R.drawable.ic_menu_close_clear_cancel,
                 getString(R.string.cancel_connection), disconnectPendingIntent);
 
-        Intent pauseVPN = new Intent(this, OpenVPNService.class);
+/*        Intent pauseVPN = new Intent(this, OpenVPNService.class);
         if (mDeviceStateReceiver == null || !mDeviceStateReceiver.isUserPaused()) {
             pauseVPN.setAction(PAUSE_VPN);
             PendingIntent pauseVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
@@ -409,7 +409,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             PendingIntent resumeVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
             nbuilder.addAction(R.drawable.ic_menu_play,
                     getString(R.string.resumevpn), resumeVPNPending);
-        }
+        }*/
     }
 
     PendingIntent getUserInputIntent(String needed) {
